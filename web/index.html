@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <script>
+var serviceBaseUrl = 'http://server2.mikron.io:8226/';
+
+function refresh() {
+    document.getElementById('timestamp').innerText = Date.now();
+    document.getElementById('service_base_url').innerText = serviceBaseUrl;
+    callGetUrl(serviceBaseUrl + 'blocks/count', (text) => document.getElementById('block_count').innerText = text);
+    callGetUrl(serviceBaseUrl + 'peers/count', (text) => document.getElementById('peers_count').innerText = text);
+}
+
+function callGetUrl(url, callback) {
+    //console.log('url ' + url);
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+        if (http.readyState == XMLHttpRequest.DONE) {
+            if (http.status == 200) {
+                callback(http.responseText);
+            }
+            else if (http.status == 400) {
+                console.log('There was an error 400 ' + url);
+            }
+            else {
+                console.log('Something else other than 200 was returned ' + http.status + ' ' + url);
+            }
+        }
+    };
+
+    http.open("GET", url, true);
+    http.send();
+}
+        </script>
+    </head>
+    <body onload="refresh()">
+        <div>
+            <h1>Mikron Explorer</h1>
+            <div>
+                Number of blocks:
+                <label id='block_count'>?</label>
+            </div>
+            <div>
+                Number of peers:
+                <label id='peers_count'>?</label>
+            </div>
+            <div>
+                Current time (utc, unix):
+                <label id='timestamp'>?</label>
+            </div>
+            <div>
+                Service URL:
+                <label id='service_base_url'>?</label>
+            </div>
+        </div>
+    </body>
+</html>
