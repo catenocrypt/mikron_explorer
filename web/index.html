@@ -29,6 +29,8 @@ function refresh_services() {
     callGetUrl('http://server2.mikron.io:8226/blocks/count', (text) => document.getElementById('treas2').innerText = text);
     document.getElementById('beta1').innerText = '?';
     callGetUrl('http://server2.mikron.io:8080/blocks/count', (text) => document.getElementById('beta1').innerText = text);
+    document.getElementById('serv_adam1').innerText = '?';
+    callGetUrl('http://ec2-18-184-105-190.eu-central-1.compute.amazonaws.com:8043/blocks/count', (text) => document.getElementById('serv_adam1').innerText = text);
 }
 
 function refresh_accounts() {
@@ -119,6 +121,9 @@ function callGetUrl(url, callback) {
                 </div>
                 <div>
                     Beta1: <label id='beta1'>?</label>
+                </div>
+                <div>
+                    Adam1: <label id='serv_adam1'>?</label>
                 </div>
                 <div>
                     <button onclick='refresh_services()'>Refresh</button>
