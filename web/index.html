@@ -3,11 +3,59 @@
         <script>
 var serviceBaseUrl = 'http://server2.mikron.io:8226/';
 
-function refresh() {
+function refresh_all() {
+    console.log("Refresh All");
+    refresh_livenet();
+    refresh_services();
+    refresh_nodes();
+    refresh_accounts();
+}
+
+function refresh_livenet() {
     document.getElementById('timestamp').innerText = Date.now();
     document.getElementById('service_base_url').innerText = serviceBaseUrl;
+    document.getElementById('block_count').innerText = '?';
     callGetUrl(serviceBaseUrl + 'blocks/count', (text) => document.getElementById('block_count').innerText = text);
-    callGetUrl(serviceBaseUrl + 'peers/count', (text) => document.getElementById('peers_count').innerText = text);
+    document.getElementById('frontier_count').innerText = '?';
+    callGetUrl(serviceBaseUrl + 'frontiers/count', (text) => document.getElementById('frontier_count').innerText = text);
+    document.getElementById('nodes_count').innerText = '?';
+    callGetUrl(serviceBaseUrl + 'peers/count', (text) => document.getElementById('nodes_count').innerText = 1 + Number(text));
+}
+
+function refresh_services() {
+    document.getElementById('rest1').innerText = '?';
+    callGetUrl('http://server1.mikron.io:8227/blocks/count', (text) => document.getElementById('rest1').innerText = text);
+    document.getElementById('treas2').innerText = '?';
+    callGetUrl('http://server2.mikron.io:8226/blocks/count', (text) => document.getElementById('treas2').innerText = text);
+    document.getElementById('beta1').innerText = '?';
+    callGetUrl('http://server2.mikron.io:8080/blocks/count', (text) => document.getElementById('beta1').innerText = text);
+}
+
+function refresh_accounts() {
+    document.getElementById("pool_mikronio_send").innerText = "?";
+    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_3hkskhw6oyeztptbofy5iprqaffcc5iwbzzuamrerum744zfxbpdwe1y9ngt", (text) => document.getElementById("pool_mikronio_send").innerText = text + " mikron");
+    document.getElementById("pool_ka_send").innerText = "?";
+    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_15zjgj59fft6a11z8cu9u91q81s3pgr86914wy6qghh1b4kqf8j6u94isi7i", (text) => document.getElementById("pool_ka_send").innerText = text + " mikron");
+}
+
+function refresh_nodes() {
+    document.getElementById('nodes_count2').innerText = '?';
+    callGetUrl(serviceBaseUrl + 'peers/count', (text) => document.getElementById('nodes_count2').innerText = 1 + Number(text));
+    document.getElementById('nodes_list').innerText = '?';
+    callGetUrl(serviceBaseUrl + 'peers/list', processNodeList);
+}
+
+function processNodeList(nodesText) {
+    var pjson = JSON.parse(nodesText);
+    if ('peer_list' in pjson) {
+        var listHtml = '<table>';
+        listHtml += "<tr><td>server2:7142</td></tr>";
+        pjson['peer_list'].forEach(element => {
+            listHtml += "<tr><td>" + element['endpoint'] + "</td></tr>";
+        });
+        listHtml += '</table>';
+        document.getElementById('nodes_list').innerHTML = listHtml;
+    }
 }
 
 function callGetUrl(url, callback) {
@@ -32,16 +80,20 @@ function callGetUrl(url, callback) {
 }
         </script>
     </head>
-    <body onload="refresh()">
+    <body onload="refresh_all()">
         <div>
             <h1>Mikron Explorer</h1>
+            <div>
+                Number of nodes:
+                <label id='nodes_count'>?</label>
+            </div>
             <div>
                 Number of blocks:
                 <label id='block_count'>?</label>
             </div>
             <div>
-                Number of peers:
-                <label id='peers_count'>?</label>
+                Number of frontiers:
+                <label id='frontier_count'>?</label>
             </div>
             <div>
                 Current time (utc, unix):
@@ -51,6 +103,54 @@ function callGetUrl(url, callback) {
                 Service URL:
                 <label id='service_base_url'>?</label>
             </div>
+            <div>
+                <button onclick='refresh_livenet()'>Refresh</button>
+            </div>
         </div>
-    </body>
+        <div>
+            <h1>Mikron Dashboard</h1>
+            <div>
+                <h2>Service instances</h2>
+                <div>
+                    Rest1: <label id='rest1'>?</label>
+                </div>
+                <div>
+                    Treas2: <label id='treas2'>?</label>
+                </div>
+                <div>
+                    Beta1: <label id='beta1'>?</label>
+                </div>
+                <div>
+                    <button onclick='refresh_services()'>Refresh</button>
+                </div>
+            </div>
+            <div>
+                <h2>Nodes</h2>
+                <div>
+                    Count: <label id='nodes_count2'>?</label>
+                </div>
+                <div>
+                    List: 
+                    <div id='nodes_list'>?</div>
+                </div>
+                <div>
+                    <button onclick='refresh_nodes()'>Refresh</button>
+                </div>
+            </div>
+            <div>
+                <h2>Pool Accounts</h2>
+                <div>
+                    Mikron.io Send pool: <label id='pool_mikronio_send'>?</label>
+                </div>
+                <div>
+                    KA Send pool: <label id='pool_ka_send'>?</label>
+                </div>
+                <div>
+                    <button onclick='refresh_accounts()'>Refresh</button>
+                </div>
+            </div>
+            <div>
+                <button onclick='refresh_all()'>Refresh All</button>
+            </div>
+        </body>
 </html>
