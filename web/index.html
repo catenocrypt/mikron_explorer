@@ -53,7 +53,7 @@ function processNodeList(nodesText) {
         var listHtml = '<table>';
         var endpoints = [];
         endpoints.push("(server2:7142)");
-        pjson['peer_list'].forEach(elem => endpoints.push(elem['endpoint']));
+        pjson['peer_list'].forEach(elem => { if (endpoints.length < 20) endpoints.push(elem['endpoint']); });
         endpoints.sort();
         endpoints.forEach(elem => {
             listHtml += "<tr><td>" + elem + "</td></tr>";
