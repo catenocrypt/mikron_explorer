@@ -36,6 +36,10 @@ function refresh_accounts() {
     callGetUrl(serviceBaseUrl + "account/balance/" + "mik_3hkskhw6oyeztptbofy5iprqaffcc5iwbzzuamrerum744zfxbpdwe1y9ngt", (text) => document.getElementById("pool_mikronio_send").innerText = text + " mikron");
     document.getElementById("pool_ka_send").innerText = "?";
     callGetUrl(serviceBaseUrl + "account/balance/" + "mik_15zjgj59fft6a11z8cu9u91q81s3pgr86914wy6qghh1b4kqf8j6u94isi7i", (text) => document.getElementById("pool_ka_send").innerText = text + " mikron");
+    document.getElementById("pool_pa_send").innerText = "?";
+    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_3p1g7cpuyrz4crbeonm568k1amuc559hegpdgcsnyjhwhbspaogh7gny87t6", (text) => document.getElementById("pool_pa_send").innerText = text + " mikron");
+    document.getElementById("pool_h3_send").innerText = "?";
+    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_1eoc5ad6mog5si9e86ps1wrsxnt97ndqzhf4m4nxfb1geejpxks6rsuedxum", (text) => document.getElementById("pool_h3_send").innerText = text + " mikron");
     document.getElementById("pool_genesis").innerText = "?";
     callGetUrl(serviceBaseUrl + "account/balance/" + "mik_1yumkjq6xscowmmz6sca79sycoup1tpqabnc3zdqgpcd1756xgo1k53z7yeg", (text) => document.getElementById("pool_genesis").innerText = text + " mikron");
 }
@@ -149,6 +153,12 @@ function callGetUrl(url, callback) {
                 </div>
                 <div>
                     KA Send pool: <label id='pool_ka_send'>?</label>
+                </div>
+                <div>
+                    PA Send pool: <label id='pool_pa_send'>?</label>
+                </div>
+                <div>
+                    H3 Send pool: <label id='pool_h3_send'>?</label>
                 </div>
                 <div>
                     Genesis: <label id='pool_genesis'>?</label>
