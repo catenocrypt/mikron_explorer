@@ -56,11 +56,11 @@ function processNodeList(nodesText) {
     if ('peer_list' in pjson) {
         var listHtml = '<table>';
         var endpoints = [];
-        endpoints.push("(server2:7142)");
-        pjson['peer_list'].forEach(elem => { if (endpoints.length < 20) endpoints.push(elem['endpoint']); });
+        endpoints.push({"endpoint":"(server2:7142)","node_id":"?"});  // self
+        pjson['peer_list'].forEach(elem => { if (endpoints.length < 40) endpoints.push(elem); });
         endpoints.sort();
         endpoints.forEach(elem => {
-            listHtml += "<tr><td>" + elem + "</td></tr>";
+            listHtml += "<tr><td>" + elem["endpoint"] + "</td><td>" + elem["node_id"].substring(0, 15) + "</td></tr>";
         });
         listHtml += '</table>';
         document.getElementById('nodes_list').innerHTML = listHtml;
@@ -133,19 +133,7 @@ function callGetUrl(url, callback) {
                     <button onclick='refresh_services()'>Refresh</button>
                 </div>
             </div>
-            <div>
-                <h2>Nodes</h2>
-                <div>
-                    Count: <label id='nodes_count2'>?</label>
-                </div>
-                <div>
-                    List: 
-                    <div id='nodes_list'>?</div>
-                </div>
-                <div>
-                    <button onclick='refresh_nodes()'>Refresh</button>
-                </div>
-            </div>
+
             <div>
                 <h2>Pool Accounts</h2>
                 <div>
@@ -167,6 +155,21 @@ function callGetUrl(url, callback) {
                     <button onclick='refresh_accounts()'>Refresh</button>
                 </div>
             </div>
+            
+            <div>
+                <h2>Nodes</h2>
+                <div>
+                    Count: <label id='nodes_count2'>?</label>
+                </div>
+                <div>
+                    List: 
+                    <div id='nodes_list'>?</div>
+                </div>
+                <div>
+                    <button onclick='refresh_nodes()'>Refresh</button>
+                </div>
+            </div>
+
             <div>
                 <button onclick='refresh_all()'>Refresh All</button>
             </div>
