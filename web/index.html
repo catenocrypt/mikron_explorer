@@ -56,11 +56,14 @@ function processNodeList(nodesText) {
     if ('peer_list' in pjson) {
         var listHtml = '<table>';
         var endpoints = [];
-        endpoints.push({"endpoint":"(server2:7142)","node_id":"?"});  // self
+        endpoints.push({"endpoint":"(server2:7142)"});  // self
         pjson['peer_list'].forEach(elem => { if (endpoints.length < 40) endpoints.push(elem); });
         endpoints.sort();
         endpoints.forEach(elem => {
-            listHtml += "<tr><td>" + elem["endpoint"] + "</td><td>" + elem["node_id"].substring(0, 15) + "</td></tr>";
+            listHtml += "<tr><td>" + elem["endpoint"] + "</td>";
+            var node_id = "-"
+            if ("node_id" in elem) { node_id = elem["node_id"].substring(0, 15); }
+            listHtml += "<td>" + node_id + "</td></tr>";
         });
         listHtml += '</table>';
         document.getElementById('nodes_list').innerHTML = listHtml;
