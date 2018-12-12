@@ -9,6 +9,7 @@ function refresh_all() {
     refresh_services();
     refresh_nodes();
     refresh_accounts();
+    refresh_recv_status();
 }
 
 function refresh_livenet() {
@@ -49,6 +50,11 @@ function refresh_nodes() {
     callGetUrl(serviceBaseUrl + 'peers/count', (text) => document.getElementById('nodes_count2').innerText = 1 + Number(text));
     document.getElementById('nodes_list').innerText = '?';
     callGetUrl(serviceBaseUrl + 'peers/list', processNodeList);
+}
+
+function refresh_recv_status() {
+    document.getElementById('recv_service_status').innerText = '?';
+    callGetUrl('http://server1.mikron.io:8227/receiver/get_status', (text) => document.getElementById('recv_service_status').innerText = text);
 }
 
 function processNodeList(nodesText) {
@@ -97,15 +103,15 @@ function callGetUrl(url, callback) {
             <h1>Mikron Explorer</h1>
             <div>
                 Number of nodes:
-                <label id='nodes_count'>?</label>
+                <b><label id='nodes_count'>?</label></b>
             </div>
             <div>
                 Number of blocks:
-                <label id='block_count'>?</label>
+                <b><label id='block_count'>?</label></b>
             </div>
             <div>
                 Number of frontiers:
-                <label id='frontier_count'>?</label>
+                <b><label id='frontier_count'>?</label></b>
             </div>
             <div>
                 Current time (utc, unix):
@@ -159,6 +165,16 @@ function callGetUrl(url, callback) {
                 </div>
             </div>
             
+            <div>
+                <h2>Receiver Service</h2>
+                <div>
+                    Receiver service status <label id='recv_service_status'>?</label>
+                </div>
+                <div>
+                    <button onclick='refresh_recv_status()'>Refresh</button>
+                </div>
+            </div>
+
             <div>
                 <h2>Nodes</h2>
                 <div>
