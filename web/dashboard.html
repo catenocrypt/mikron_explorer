@@ -3,9 +3,11 @@
         <meta charset="UTF-8"/>
         <script>
 var serviceBaseUrl = 'http://server2.mikron.io:8226/';
+var explorerBaseUrl = 'http://server2.mikron.io:8226/';
 
 function refresh_all() {
     console.log("Refresh All");
+    document.getElementById('explorer_ref').href = explorerBaseUrl + 'explorer/';
     refresh_livenet();
     refresh_services();
     refresh_nodes();
@@ -33,19 +35,19 @@ function refresh_services() {
     callGetUrl('http://server2.mikron.io:8080/blocks/count', (text) => document.getElementById('beta1').innerText = text);
 }
 
+function refresh_account(html_id, account) {
+    document.getElementById(html_id).innerText = "?";
+    callGetUrl(serviceBaseUrl + "account/balance/" + account, (text) => document.getElementById(html_id).innerHTML = 
+        '<b>' + text + '</b> MIK (<a href="' + explorerBaseUrl + 'explorer/account/' + account + '">explore</a>)');
+}
+
 function refresh_accounts() {
-    document.getElementById("pool_mikronio_send").innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_3hkskhw6oyeztptbofy5iprqaffcc5iwbzzuamrerum744zfxbpdwe1y9ngt", (text) => document.getElementById("pool_mikronio_send").innerText = text + " MIK");
-    document.getElementById("pool_ka_send").innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_15zjgj59fft6a11z8cu9u91q81s3pgr86914wy6qghh1b4kqf8j6u94isi7i", (text) => document.getElementById("pool_ka_send").innerText = text + " MIK");
-    document.getElementById("pool_pa_send").innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_3p1g7cpuyrz4crbeonm568k1amuc559hegpdgcsnyjhwhbspaogh7gny87t6", (text) => document.getElementById("pool_pa_send").innerText = text + " MIK");
-    document.getElementById("pool_h3_send").innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_1eoc5ad6mog5si9e86ps1wrsxnt97ndqzhf4m4nxfb1geejpxks6rsuedxum", (text) => document.getElementById("pool_h3_send").innerText = text + " MIK");
-    document.getElementById("pool_reward_send").innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_1mefbtc87z9ti53idswudw8eurj3epwdnhjhamj8mn7o439ft9nay1cw1iqx", (text) => document.getElementById("pool_reward_send").innerText = text + " MIK");
-    document.getElementById("pool_genesis").innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + "mik_1yumkjq6xscowmmz6sca79sycoup1tpqabnc3zdqgpcd1756xgo1k53z7yeg", (text) => document.getElementById("pool_genesis").innerText = text + " MIK");
+    refresh_account('pool_mikronio_send', 'mik_3hkskhw6oyeztptbofy5iprqaffcc5iwbzzuamrerum744zfxbpdwe1y9ngt');
+    refresh_account('pool_ka_send', 'mik_15zjgj59fft6a11z8cu9u91q81s3pgr86914wy6qghh1b4kqf8j6u94isi7i');
+    refresh_account('pool_pa_send', 'mik_3p1g7cpuyrz4crbeonm568k1amuc559hegpdgcsnyjhwhbspaogh7gny87t6');
+    refresh_account('pool_h3_send', 'mik_1eoc5ad6mog5si9e86ps1wrsxnt97ndqzhf4m4nxfb1geejpxks6rsuedxum');
+    refresh_account('pool_reward_send', 'mik_1mefbtc87z9ti53idswudw8eurj3epwdnhjhamj8mn7o439ft9nay1cw1iqx');
+    refresh_account('pool_genesis', 'mik_1yumkjq6xscowmmz6sca79sycoup1tpqabnc3zdqgpcd1756xgo1k53z7yeg');
 }
 
 function refresh_nodes() {
@@ -103,7 +105,7 @@ function callGetUrl(url, callback) {
     </head>
     <body onload="refresh_all()">
         <div>
-            <h1>Mikron Explorer</h1>
+            <h1><a id='explorer_ref' href='?'>Mikron Explorer</a></h1>
             <div>
                 Number of nodes:
                 <b><label id='nodes_count'>?</label></b>
