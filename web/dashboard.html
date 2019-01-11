@@ -35,19 +35,32 @@ function refresh_services() {
     callGetUrl('http://server2.mikron.io:8080/blocks/count', (text) => document.getElementById('beta1').innerText = text);
 }
 
-function refresh_account(html_id, account) {
+function refresh_account(html_id, account, limit1, limit2) {
     document.getElementById(html_id).innerText = "?";
-    callGetUrl(serviceBaseUrl + "account/balance/" + account, (text) => document.getElementById(html_id).innerHTML = 
-        '<b>' + text + '</b> MIK (<a href="' + explorerBaseUrl + 'explorer/account/' + account + '">explore</a>)');
+    callGetUrl(serviceBaseUrl + "account/balance/" + account, (text) => document.getElementById(html_id).innerHTML = account_as_html(account, text, limit1, limit2));
+}
+
+function account_as_html(account, balance, limit1, limit2) {
+    var bal = Math.floor(parseFloat(balance));
+    var html = '<b>';
+    if (bal < limit2) {
+        html += '<font color="red">' + bal + '</font>';
+    } else if (bal < limit1) {
+        html += '<font color="brown">' + bal + '</font>';
+    } else {
+        html += bal;
+    }
+    html += '</b> MIK (<a href="' + explorerBaseUrl + 'explorer/account/' + account + '">explore</a>)';
+    return html;
 }
 
 function refresh_accounts() {
-    refresh_account('pool_mikronio_send', 'mik_3hkskhw6oyeztptbofy5iprqaffcc5iwbzzuamrerum744zfxbpdwe1y9ngt');
-    refresh_account('pool_ka_send', 'mik_15zjgj59fft6a11z8cu9u91q81s3pgr86914wy6qghh1b4kqf8j6u94isi7i');
-    refresh_account('pool_pa_send', 'mik_3p1g7cpuyrz4crbeonm568k1amuc559hegpdgcsnyjhwhbspaogh7gny87t6');
-    refresh_account('pool_h3_send', 'mik_1eoc5ad6mog5si9e86ps1wrsxnt97ndqzhf4m4nxfb1geejpxks6rsuedxum');
-    refresh_account('pool_reward_send', 'mik_1mefbtc87z9ti53idswudw8eurj3epwdnhjhamj8mn7o439ft9nay1cw1iqx');
-    refresh_account('pool_genesis', 'mik_1yumkjq6xscowmmz6sca79sycoup1tpqabnc3zdqgpcd1756xgo1k53z7yeg');
+    refresh_account('pool_mikronio_send', 'mik_3hkskhw6oyeztptbofy5iprqaffcc5iwbzzuamrerum744zfxbpdwe1y9ngt', 20000, 9000);
+    refresh_account('pool_ka_send', 'mik_15zjgj59fft6a11z8cu9u91q81s3pgr86914wy6qghh1b4kqf8j6u94isi7i', 8000, 5000);
+    refresh_account('pool_pa_send', 'mik_3p1g7cpuyrz4crbeonm568k1amuc559hegpdgcsnyjhwhbspaogh7gny87t6', 8000, 5000);
+    refresh_account('pool_h3_send', 'mik_1eoc5ad6mog5si9e86ps1wrsxnt97ndqzhf4m4nxfb1geejpxks6rsuedxum', 8000, 5000);
+    refresh_account('pool_reward_send', 'mik_1mefbtc87z9ti53idswudw8eurj3epwdnhjhamj8mn7o439ft9nay1cw1iqx', 10000, 8000);
+    refresh_account('pool_genesis', 'mik_1yumkjq6xscowmmz6sca79sycoup1tpqabnc3zdqgpcd1756xgo1k53z7yeg', 8000, 5000);
 }
 
 function refresh_nodes() {
