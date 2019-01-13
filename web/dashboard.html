@@ -78,15 +78,15 @@ function refresh_recv_status() {
 function processNodeList(nodesText) {
     var pjson = JSON.parse(nodesText);
     if ('peer_list' in pjson) {
-        var listHtml = '<table>';
+        var listHtml = '<table><tr><td><i>endpoint</i></td><td><i>proto_ver</i></td><td><i>node_id</i></td>';
         var endpoints = [];
-        endpoints.push({"endpoint":"(server2:7142)"});  // self
+        endpoints.push({"endpoint":"(server2:7142)", "net_version":"-"});  // self
         pjson['peer_list'].forEach(elem => { if (endpoints.length < 40) endpoints.push(elem); });
         endpoints.sort();
         endpoints.forEach(elem => {
-            listHtml += "<tr><td>" + elem["endpoint"] + "</td>";
+            listHtml += "<tr><td>" + elem["endpoint"] + "</td><td>" + elem["net_version"] + "</td>";
             var node_id = "-"
-            if ("node_id" in elem) { node_id = elem["node_id"].substring(0, 15); }
+            if ("node_id" in elem) { node_id = elem["node_id"].substring(0, 15) + "..."; }
             listHtml += "<td>" + node_id + "</td></tr>";
         });
         listHtml += '</table>';
